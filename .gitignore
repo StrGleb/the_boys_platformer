@@ -1,0 +1,16 @@
+game
+main
+*.exe
+*.out
+*.app
+*.o
+*.obj
+*.a
+*.lib
+*.so
+*.dylib
+.vscode/
+.history/
+*.log
+config/highscores.txt
+.DS_Store
