@@ -2,11 +2,13 @@
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include <string>
+#include <map>
 
 class Map {
     std::vector<std::string> mGrid;
-    sf::RectangleShape mTile;
     float mTileSize;
+
+    std::map<char, sf::Texture> mTextures; 
 
 public:
     Map();

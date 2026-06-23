@@ -1,11 +1,37 @@
 #include "Map.h"
 
+#include <filesystem>
 #include <fstream>
 #include <iostream>
 
+namespace fs = std::filesystem;
+
 Map::Map() {
     mTileSize = 40.f;
-    mTile.setSize({mTileSize, mTileSize});
+
+    fs::path assetsPath = "assets";
+
+    if (!fs::exists(assetsPath)) {
+        if (fs::exists("../assets")) {
+            assetsPath = "../assets";
+        } 
+        else {
+            std::cerr << "Папка assets не найдена!\n";
+        }
+    }
+
+    if (!mTextures['1'].loadFromFile((assetsPath / "asfalt.png").string())) {
+        std::cerr << "Не удалось загрузить asfalt.png\n";
+    }
+    if (!mTextures['2'].loadFromFile((assetsPath / "kamen_kirpich.png").string())) {
+        std::cerr << "Не удалось загрузить kamen_kirpich.png\n";
+    }
+    if (!mTextures['4'].loadFromFile((assetsPath / "ship.png").string())) {
+        std::cerr << "Не удалось загрузить ship.png\n";
+    }
+    if (!mTextures['5'].loadFromFile((assetsPath / "gorod.png").string())) {
+        std::cerr << "Не удалось загрузить gorod.png\n";
+    }
 }
 
 void Map::loadFromFile(const std::string& filename) {
@@ -38,22 +64,10 @@ void Map::draw(sf::RenderWindow& window) {
         for (size_t col = 0; col < mGrid[row].size(); ++col) {
             char tileType = mGrid[row][col];
 
-            if (tileType == '1') {
-                mTile.setFillColor(sf::Color(100, 100, 100));
-                mTile.setPosition({col * mTileSize, row * mTileSize});
-                window.draw(mTile);
-            } else if (tileType == '2') {
-                mTile.setFillColor(sf::Color::Green);
-                mTile.setPosition({col * mTileSize, row * mTileSize});
-                window.draw(mTile);
-            } else if (tileType == '3') { // Наш финиш
-                mTile.setFillColor(sf::Color::Yellow);
-                mTile.setPosition({col * mTileSize, row * mTileSize});
-                window.draw(mTile);
-            } else if (tileType == '4') { 
-                mTile.setFillColor(sf::Color(150, 50, 50)); 
-                mTile.setPosition({col * mTileSize, row * mTileSize});
-                window.draw(mTile);
+            if (mTextures.count(tileType)) {
+                sf::Sprite tileSprite(mTextures.at(tileType));
+                tileSprite.setPosition({col * mTileSize, row * mTileSize});
+                window.draw(tileSprite);
             }
         }
     }

@@ -21,8 +21,6 @@ class Player {
     bool mIsMovingRight = false;
     bool mIsJumping = false;
 
-    bool mWasMovingLastFrame = false;
-
 public:
     Player();
     void update(const Map& map);
