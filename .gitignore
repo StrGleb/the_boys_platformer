@@ -12,5 +12,7 @@ main
 .vscode/
 .history/
 *.log
-config/highscores.txt
 .DS_Store
+
+.agents/
+.codex/
