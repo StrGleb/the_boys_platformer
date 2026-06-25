@@ -44,6 +44,12 @@ class Game {
     std::vector<std::string> mLevelFiles;
     size_t mCurrentLevelIndex;
     State mState;
+    bool mKeyboardMovingLeft = false;
+    bool mKeyboardMovingRight = false;
+    bool mKeyboardJumping = false;
+    bool mMouseMovingLeft = false;
+    bool mMouseMovingRight = false;
+    bool mMouseJumping = false;
 
     void loadEnemySpawns();
     void resetEnemies();
@@ -52,6 +58,7 @@ class Game {
     void showLevelCompleteScreen();
     void showVictoryScreen();
     void clearPlayerInput();
+    void syncPlayerInput();
     void updateParallax();
     bool hasReachedLevelExit() const;
     bool isHomelanderDefeated() const;

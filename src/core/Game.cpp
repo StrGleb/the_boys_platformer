@@ -199,9 +199,19 @@ void Game::showVictoryScreen() {
 }
 
 void Game::clearPlayerInput() {
-    mPlayer.setMovingLeft(false);
-    mPlayer.setMovingRight(false);
-    mPlayer.setJumping(false);
+    mKeyboardMovingLeft = false;
+    mKeyboardMovingRight = false;
+    mKeyboardJumping = false;
+    mMouseMovingLeft = false;
+    mMouseMovingRight = false;
+    mMouseJumping = false;
+    syncPlayerInput();
+}
+
+void Game::syncPlayerInput() {
+    mPlayer.setMovingLeft(mKeyboardMovingLeft || mMouseMovingLeft);
+    mPlayer.setMovingRight(mKeyboardMovingRight || mMouseMovingRight);
+    mPlayer.setJumping(mKeyboardJumping || mMouseJumping);
 }
 
 void Game::updateParallax() {
@@ -309,28 +319,56 @@ void Game::processEvents() {
         }
 
         if (mState == State::Playing) {
+            if (const auto* keyPressed = event->getIf<sf::Event::KeyPressed>()) {
+                if (keyPressed->code == sf::Keyboard::Key::Left) {
+                    mKeyboardMovingLeft = true;
+                }
+                if (keyPressed->code == sf::Keyboard::Key::Right) {
+                    mKeyboardMovingRight = true;
+                }
+                if (keyPressed->code == sf::Keyboard::Key::Up) {
+                    mKeyboardJumping = true;
+                }
+                syncPlayerInput();
+            }
+
+            if (const auto* keyReleased = event->getIf<sf::Event::KeyReleased>()) {
+                if (keyReleased->code == sf::Keyboard::Key::Left) {
+                    mKeyboardMovingLeft = false;
+                }
+                if (keyReleased->code == sf::Keyboard::Key::Right) {
+                    mKeyboardMovingRight = false;
+                }
+                if (keyReleased->code == sf::Keyboard::Key::Up) {
+                    mKeyboardJumping = false;
+                }
+                syncPlayerInput();
+            }
+
             if (const auto* mousePressed = event->getIf<sf::Event::MouseButtonPressed>()) {
                 if (mousePressed->button == sf::Mouse::Button::Left) {
-                    mPlayer.setMovingLeft(true);
+                    mMouseMovingLeft = true;
                 }
                 if (mousePressed->button == sf::Mouse::Button::Right) {
-                    mPlayer.setMovingRight(true);
+                    mMouseMovingRight = true;
                 }
                 if (mousePressed->button == sf::Mouse::Button::Middle) {
-                    mPlayer.setJumping(true);
+                    mMouseJumping = true;
                 }
+                syncPlayerInput();
             }
 
             if (const auto* mouseReleased = event->getIf<sf::Event::MouseButtonReleased>()) {
                 if (mouseReleased->button == sf::Mouse::Button::Left) {
-                    mPlayer.setMovingLeft(false);
+                    mMouseMovingLeft = false;
                 }
                 if (mouseReleased->button == sf::Mouse::Button::Right) {
-                    mPlayer.setMovingRight(false);
+                    mMouseMovingRight = false;
                 }
                 if (mouseReleased->button == sf::Mouse::Button::Middle) {
-                    mPlayer.setJumping(false);
+                    mMouseJumping = false;
                 }
+                syncPlayerInput();
             }
 
             continue;

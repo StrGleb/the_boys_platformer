@@ -60,14 +60,14 @@ sf::FloatRect getEnemyHitbox(const sf::Sprite& sprite) {
 }
 }
 
-Enemy::Enemy(EnemyType type, sf::Vector2f startPos)
-    : mType(type)
-    , mStartPos(startPos)
-    , mHealth(0)
-    , mIsActive(false)
-    , mIsDead(false)
-    , mSpeed(0.f)
-    , mDirection(-1.f) {
+Enemy::Enemy(EnemyType type, sf::Vector2f startPos): 
+    mType(type),
+    mStartPos(startPos),
+    mHealth(0),
+    mIsActive(false),
+    mIsDead(false),
+    mSpeed(0.f),
+    mDirection(-1.f) {
     const EnemyConfig config = getEnemyConfig(mType);
 
     fs::path assetsPath = "assets";
